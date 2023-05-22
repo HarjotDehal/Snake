@@ -1,0 +1,419 @@
+
+import java.awt.*;
+import java.awt.event.*;
+//import java.io.File;
+//import java.io.IOException;
+
+//import javax.imageio.ImageIO;
+import javax.swing.*;
+//import javax.swing.ImageIcon;
+import java.util.Random;
+
+
+
+
+
+
+public class Window extends JPanel implements ActionListener {
+
+
+static final int Width_of_Screen = 1200;
+static final int height_of_Screen = 800;
+static final int unit_size =50;
+static final int blocks = (Width_of_Screen*height_of_Screen) / (unit_size*unit_size);
+
+Graphics f;
+int highnum =0;
+// lower the number, faster the speed/ game will be played
+
+static final int speed = 100; 
+
+int x;
+int y;
+
+
+
+
+final int Snakex[] = new int[blocks];
+final int Snakey [] = new int[blocks];
+int snakeslength = 5;
+
+int num_Apples_ate = 0;
+int AppleX, AppleY;
+char direction ='E';
+boolean in_Progress =false;
+
+Timer timer;
+
+//String imagepath="C:/Coding Projects/Snake/istockphoto-1272346946-612x612.jpg";{
+
+
+//try {
+
+ //   Image myImage = ImageIO.read(new File( imagepath));
+//} catch (IOException e) {
+  //  e.printStackTrace();
+    // TODO: handle exception
+//}
+
+//Image appleimage= new Image("apple-94.png");
+
+//private ImageIcon image2 = new ImageIcon(getclass().getResource("apple-94.png"));
+
+Window(){
+
+    this.setPreferredSize(new Dimension(Width_of_Screen, height_of_Screen)); 
+    this.setBackground(Color.black);   
+    this.setFocusable(true);
+    this.addKeyListener(new MyKeyAdapter());
+
+    playSnake();
+}
+
+
+    public void playSnake(){
+
+setApple();
+in_Progress=true;
+timer = new Timer(speed, this);
+timer.start();
+
+    }
+
+    public void hitAPPLE(){
+
+        if (Snakex[0]==AppleX&& Snakey[0]==AppleY){
+            snakeslength++;
+            
+            num_Apples_ate++;
+            if(num_Apples_ate>highnum){
+                highnum++;
+            }
+            
+            setApple();
+        }
+    }
+
+public void displayGame(Graphics g){
+
+    if (in_Progress){
+
+g.setColor(new Color(150, 150   , 10));
+        for(int i=0; i<=height_of_Screen/unit_size;i++){
+
+           // g.drawLine(i*unit_size, 0, i*unit_size, height_of_Screen);
+            g.drawLine(0, i*unit_size, Width_of_Screen, i*unit_size);
+
+        }
+        for(int i=0; i<=Width_of_Screen/unit_size;i++){
+
+             g.drawLine(i*unit_size, 0, i*unit_size, height_of_Screen);
+            // g.drawLine(0, i*unit_size, Width_of_Screen, i*unit_size);
+         }
+
+      //  g.drawImage(appleimage, AppleX, AppleY, unit_size, unit_size, 
+       // getFocusCycleRootAncestor());
+
+            g.setColor(Color.red);
+            g.fillOval(AppleX, AppleY, unit_size, unit_size);
+    
+
+            for(int i=0;i<snakeslength;i++){
+
+                if(i==0){
+                g.setColor(new Color(0, 250,0));
+                g.fillRect(Snakex[i], Snakey[i], unit_size, unit_size);
+                }
+                else{
+
+                    g.setColor(new Color(0, 200, 0));
+                    g.fillRect(Snakex[i], Snakey[i], unit_size, unit_size);
+                }
+            }
+
+            g.setColor(Color.red);
+
+            g.setFont(new Font("INK FREE", Font.BOLD, 40)); 
+            FontMetrics metrics = getFontMetrics(g.getFont());
+	g.drawString("Score: "+num_Apples_ate  , (Width_of_Screen  - 
+     metrics.stringWidth("Score: "+num_Apples_ate))/2, 
+     g.getFont().getSize());
+		
+     g.setFont(new Font("INK FREE", Font.BOLD, 30)); 
+     g.drawString("High Score: "+highnum, 999*(Width_of_Screen  - 
+     metrics.stringWidth("High Score: "+highnum))/1000, 
+     g.getFont().getSize());
+
+
+
+     
+
+        }
+
+else{
+
+    
+//     g.setFont(new Font("INK FREE", Font.BOLD, 100)); 
+//     FontMetrics metrics = getFontMetrics(g.getFont());
+// g.drawString("OOPS"  , (Width_of_Screen  - 
+// metrics.stringWidth("OOPS"))/2, height_of_Screen/2);
+    Lost(g);
+}
+
+
+
+}
+
+public void Lost(Graphics g){
+
+try {
+    
+    
+    
+Thread.sleep(500);
+
+} catch (Exception e) {
+    // TODO: handle exception
+}
+
+if(in_Progress==false){
+g.setColor(Color.red);
+g.setFont(new Font("Ink Free",Font.BOLD, 40));
+FontMetrics metrics = getFontMetrics(g.getFont());
+	g.drawString("Score: "+num_Apples_ate  , (Width_of_Screen  - 
+     metrics.stringWidth("Score: "+num_Apples_ate))/2, 
+     g.getFont().getSize());
+
+
+     g.setFont(new Font("Ink Free",Font.BOLD, 100));
+
+     FontMetrics metrics2 = getFontMetrics(g.getFont());
+	g.drawString("Game Over: " , (Width_of_Screen  - 
+     metrics2.stringWidth("Game Over"))/2,height_of_Screen/2); 
+     
+
+
+     g.setFont(new Font("INK FREE", Font.BOLD, 30)); 
+     g.drawString("High Score: "+highnum, 999*(Width_of_Screen  - 
+     metrics.stringWidth("High Score: "+highnum))/1000, 
+     g.getFont().getSize());
+
+
+
+     g.setFont(new Font("Ink Free",Font.BOLD, 100));
+    // FontMetrics metrics2 = getFontMetrics(g.getFont());
+    
+    g.drawString("Press Enter to Play Again"  , (Width_of_Screen  - 
+      metrics2.stringWidth("Press Enter to Play Again"))/2,5*height_of_Screen/6); 
+      
+
+}
+
+    //   try {
+    //     Thread.sleep(900);
+    // } catch (InterruptedException e) {
+    //     // TODO Auto-generated catch block
+    //     e.printStackTrace();
+    // }
+
+
+
+}
+
+    public void paintComponent (Graphics g ){
+
+f=g;
+        super.paintComponent(g);
+        displayGame(g);
+   
+    }
+
+
+
+
+
+
+public void newApp (){
+
+    Random random = new Random();
+     x = random.nextInt((int)(Width_of_Screen/unit_size))* unit_size;
+     y = random.nextInt((int)(height_of_Screen/unit_size))* unit_size;
+AppleX=x;
+AppleY=y;
+}
+    public void setApple (){
+Random random = new Random();
+        int x = random.nextInt((int)(Width_of_Screen/unit_size))* unit_size;
+        int y = random.nextInt((int)(height_of_Screen/unit_size))* unit_size;
+boolean works = false;
+
+
+
+while(!works ){
+        for (int i=0;i<snakeslength;i++){
+
+            if(Snakex[i] == x && Snakey [i] ==y){
+newApp();
+i =0;
+            }
+        }
+     
+        works = true;
+    }
+    
+    AppleX=x;
+    AppleY=y;
+    //if(random.nextInt((int)(Width_of_Screen/unit_size))* unit_size)
+    }
+
+
+
+public void move(){
+
+
+
+    for(int i=snakeslength;i>0;i--){
+
+
+
+        Snakex[i]=Snakex[i-1];
+        Snakey[i]=Snakey[i-1];
+    }
+
+switch (direction){
+
+    case 'N':
+    Snakey[0] = Snakey[0] - unit_size;
+    break;
+case 'S':
+    Snakey[0] = Snakey[0] + unit_size;
+    break;
+case 'W':
+    Snakex[0] = Snakex [0] - unit_size;
+    break;
+case 'E':
+    Snakex[0] = Snakex[0] + unit_size;
+    break;
+
+
+}
+
+
+}
+
+
+public void hitsomething(){
+
+    for(int i = snakeslength;i>0;i--) {
+        if((Snakex[0] == Snakex[i])&& (Snakey[0] == Snakey[i])) {
+            in_Progress = false;
+        }
+    }
+    //check if head touches left border
+    if(Snakex[0] < 0) {
+        in_Progress = false;
+    }
+    //check if head touches right border
+    if(Snakex[0] >= Width_of_Screen) {
+        in_Progress = false;
+    }
+    //check if head touches top border
+    if(Snakey[0] < 0) {
+        in_Progress = false;
+    }
+    //check if head touches bottom border
+    if(Snakey[0] >= height_of_Screen) {
+        in_Progress = false;
+    }
+    
+    if(!in_Progress) {
+        timer.stop();
+    }
+
+
+}
+
+
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        // TODO Auto-generated method stub
+      //  throw new UnsupportedOperationException("Unimplemented method 'actionPerformed'");
+    
+      if(in_Progress){
+
+move();
+hitAPPLE();
+hitsomething();
+      }
+   
+      repaint();
+    
+    }
+
+
+    public class MyKeyAdapter extends KeyAdapter{
+
+public void keyPressed(KeyEvent e){
+
+    switch(e.getKeyCode()){
+
+        case KeyEvent.VK_LEFT:
+        if(direction != 'E') {
+            direction = 'W';
+        }
+        break;
+    case KeyEvent.VK_RIGHT:
+        if(direction != 'W') {
+            direction = 'E';
+        }
+        break;
+    case KeyEvent.VK_UP:
+        if(direction != 'S') {
+            direction = 'N';
+        }
+        break;
+    case KeyEvent.VK_DOWN:
+        if(direction != 'N') {
+            direction = 'S';
+        }
+        break;
+
+        case KeyEvent.VK_ENTER:
+        if(in_Progress==false){
+////System.out.println("hi");     
+  
+            //direction='E';
+        for (int i = 0; i < Snakex.length; i++) {
+            Snakex[i]=0;
+        }
+        for (int i = 0; i < Snakey.length; i++) {
+            Snakey[i]=0;
+        }
+        snakeslength=5;
+        direction='E';
+        num_Apples_ate=0;
+        setApple();
+        in_Progress=true;
+       // timer = new Timer(speed, this);
+        timer.start();
+       // int restart =1;
+       // paintComponent(g);
+       //displayGame(f);
+
+}
+//if(in_Progress==true){
+  //  System.out.println("hi");        }
+        break;
+    }
+
+    }
+}
+    
+    
+
+
+
+
+
+}
