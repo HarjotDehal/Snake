@@ -3,10 +3,17 @@ I Created a Snake game in Java. It has all the normal functions of a Snake game 
 
 
 
-
-
-
-![image](https://github.com/HarjotDehal/Snake/assets/121592317/f6e449a3-0fd4-48d0-83fe-dfbe9cfa3910)
+This is the game screen
 
 
 ![image](https://github.com/HarjotDehal/Snake/assets/121592317/ffde3fa8-3516-49d0-b1b4-2a187f62e238)
+
+
+
+
+
+
+
+This is the loser screen
+
+![image](https://github.com/HarjotDehal/Snake/assets/121592317/f6e449a3-0fd4-48d0-83fe-dfbe9cfa3910)
