@@ -1,1 +1,1 @@
-# Snake
+I Created a Snake game in Java. It has all the normal functions of a Snake game which you can control with your arrow keys. It keeps track of your high score and it allows you to restart the game inside the application whenever you lose. 
